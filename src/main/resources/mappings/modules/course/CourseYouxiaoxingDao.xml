@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.course.dao.CourseYouxiaoxingDao">
+    
+	<sql id="courseYouxiaoxingColumns">
+		a.id AS "id",
+		a.course_id AS "course.Id",
+		a.glxwt AS "glxwt",
+		a.jyxwt AS "jyxwt",
+		a.tlxwt AS "tlxwt",
+		a.czxwt AS "czxwt",
+		a.ppxwt AS "ppxwt",
+		a.dm AS "dm",
+		a.rxsqd AS "rxsqd",
+		a.jjszd AS "jjszd",
+		a.jwjszd AS "jwjszd",
+		a.glxxtcwt AS "glxxtcwt",
+		a.jtqd AS "jtqd",
+		a.tlhhb AS "tlhhb",
+		a.gbhd AS "gbhd",
+		a.zyd AS "zyd",
+		a.whd AS "whd",
+		a.pdsf AS "pdsf",
+		a.rzjyxhd AS "rzjyxhd",
+		a.tlxhd AS "tlxhd",
+		a.czpjxhd AS "czpjxhd",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="courseYouxiaoxingJoins">
+		LEFT JOIN course b ON b.id = a.course_id
+	</sql>
+    
+	<select id="get" resultType="CourseYouxiaoxing">
+		SELECT 
+			<include refid="courseYouxiaoxingColumns"/>
+		FROM course_youxiaoxing a
+		<include refid="courseYouxiaoxingJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="CourseYouxiaoxing">
+		SELECT 
+			<include refid="courseYouxiaoxingColumns"/>
+		FROM course_youxiaoxing a
+		<include refid="courseYouxiaoxingJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="course != null and course.Id != null and course.Id != ''">
+				AND a.course_id = #{course.Id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="CourseYouxiaoxing">
+		SELECT 
+			<include refid="courseYouxiaoxingColumns"/>
+		FROM course_youxiaoxing a
+		<include refid="courseYouxiaoxingJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO course_youxiaoxing(
+			id,
+			course_id,
+			glxwt,
+			jyxwt,
+			tlxwt,
+			czxwt,
+			ppxwt,
+			dm,
+			rxsqd,
+			jjszd,
+			jwjszd,
+			glxxtcwt,
+			jtqd,
+			tlhhb,
+			gbhd,
+			zyd,
+			whd,
+			pdsf,
+			rzjyxhd,
+			tlxhd,
+			czpjxhd,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{course.Id},
+			#{glxwt},
+			#{jyxwt},
+			#{tlxwt},
+			#{czxwt},
+			#{ppxwt},
+			#{dm},
+			#{rxsqd},
+			#{jjszd},
+			#{jwjszd},
+			#{glxxtcwt},
+			#{jtqd},
+			#{tlhhb},
+			#{gbhd},
+			#{zyd},
+			#{whd},
+			#{pdsf},
+			#{rzjyxhd},
+			#{tlxhd},
+			#{czpjxhd},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE course_youxiaoxing SET 	
+			course_id = #{course.Id},
+			glxwt = #{glxwt},
+			jyxwt = #{jyxwt},
+			tlxwt = #{tlxwt},
+			czxwt = #{czxwt},
+			ppxwt = #{ppxwt},
+			dm = #{dm},
+			rxsqd = #{rxsqd},
+			jjszd = #{jjszd},
+			jwjszd = #{jwjszd},
+			glxxtcwt = #{glxxtcwt},
+			jtqd = #{jtqd},
+			tlhhb = #{tlhhb},
+			gbhd = #{gbhd},
+			zyd = #{zyd},
+			whd = #{whd},
+			pdsf = #{pdsf},
+			rzjyxhd = #{rzjyxhd},
+			tlxhd = #{tlxhd},
+			czpjxhd = #{czpjxhd},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM course_youxiaoxing 
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE course_id = #{course.Id}
+			</otherwise>
+		</choose>
+	</update>
+	
+	<insert id="archive">
+		INSERT INTO history_course_youxiaoxing(
+			id,
+			course_id,
+			glxwt,
+			jyxwt,
+			tlxwt,
+			czxwt,
+			ppxwt,
+			dm,
+			rxsqd,
+			jjszd,
+			jwjszd,
+			glxxtcwt,
+			jtqd,
+			tlhhb,
+			gbhd,
+			zyd,
+			whd,
+			pdsf,
+			rzjyxhd,
+			tlxhd,
+			czpjxhd,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{course.Id},
+			#{glxwt},
+			#{jyxwt},
+			#{tlxwt},
+			#{czxwt},
+			#{ppxwt},
+			#{dm},
+			#{rxsqd},
+			#{jjszd},
+			#{jwjszd},
+			#{glxxtcwt},
+			#{jtqd},
+			#{tlhhb},
+			#{gbhd},
+			#{zyd},
+			#{whd},
+			#{pdsf},
+			#{rzjyxhd},
+			#{tlxhd},
+			#{czpjxhd},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+</mapper>

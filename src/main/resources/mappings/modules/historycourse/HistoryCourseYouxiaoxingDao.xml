@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.historycourse.dao.HistoryCourseYouxiaoxingDao">
+    
+	<sql id="historyCourseYouxiaoxingColumns">
+		a.id AS "id",
+		a.course_id AS "course.id",
+		a.glxwt AS "glxwt",
+		a.jyxwt AS "jyxwt",
+		a.tlxwt AS "tlxwt",
+		a.czxwt AS "czxwt",
+		a.ppxwt AS "ppxwt",
+		a.dm AS "dm",
+		a.rxsqd AS "rxsqd",
+		a.jjszd AS "jjszd",
+		a.jwjszd AS "jwjszd",
+		a.glxxtcwt AS "glxxtcwt",
+		a.jtqd AS "jtqd",
+		a.tlhhb AS "tlhhb",
+		a.gbhd AS "gbhd",
+		a.zyd AS "zyd",
+		a.whd AS "whd",
+		a.pdsf AS "pdsf",
+		a.rzjyxhd AS "rzjyxhd",
+		a.tlxhd AS "tlxhd",
+		a.czpjxhd AS "czpjxhd",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="historyCourseYouxiaoxingJoins">
+		LEFT JOIN history_course b ON b.id = a.course_id
+	</sql>
+    
+	<select id="get" resultType="HistoryCourseYouxiaoxing">
+		SELECT 
+			<include refid="historyCourseYouxiaoxingColumns"/>
+		FROM history_course_youxiaoxing a
+		<include refid="historyCourseYouxiaoxingJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="HistoryCourseYouxiaoxing">
+		SELECT 
+			<include refid="historyCourseYouxiaoxingColumns"/>
+		FROM history_course_youxiaoxing a
+		<include refid="historyCourseYouxiaoxingJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="course != null and course.id != null and course.id != ''">
+				AND a.course_id = #{course.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="HistoryCourseYouxiaoxing">
+		SELECT 
+			<include refid="historyCourseYouxiaoxingColumns"/>
+		FROM history_course_youxiaoxing a
+		<include refid="historyCourseYouxiaoxingJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO history_course_youxiaoxing(
+			id,
+			course_id,
+			glxwt,
+			jyxwt,
+			tlxwt,
+			czxwt,
+			ppxwt,
+			dm,
+			rxsqd,
+			jjszd,
+			jwjszd,
+			glxxtcwt,
+			jtqd,
+			tlhhb,
+			gbhd,
+			zyd,
+			whd,
+			pdsf,
+			rzjyxhd,
+			tlxhd,
+			czpjxhd,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{course.id},
+			#{glxwt},
+			#{jyxwt},
+			#{tlxwt},
+			#{czxwt},
+			#{ppxwt},
+			#{dm},
+			#{rxsqd},
+			#{jjszd},
+			#{jwjszd},
+			#{glxxtcwt},
+			#{jtqd},
+			#{tlhhb},
+			#{gbhd},
+			#{zyd},
+			#{whd},
+			#{pdsf},
+			#{rzjyxhd},
+			#{tlxhd},
+			#{czpjxhd},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE history_course_youxiaoxing SET 	
+			course_id = #{course.id},
+			glxwt = #{glxwt},
+			jyxwt = #{jyxwt},
+			tlxwt = #{tlxwt},
+			czxwt = #{czxwt},
+			ppxwt = #{ppxwt},
+			dm = #{dm},
+			rxsqd = #{rxsqd},
+			jjszd = #{jjszd},
+			jwjszd = #{jwjszd},
+			glxxtcwt = #{glxxtcwt},
+			jtqd = #{jtqd},
+			tlhhb = #{tlhhb},
+			gbhd = #{gbhd},
+			zyd = #{zyd},
+			whd = #{whd},
+			pdsf = #{pdsf},
+			rzjyxhd = #{rzjyxhd},
+			tlxhd = #{tlxhd},
+			czpjxhd = #{czpjxhd},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE history_course_youxiaoxing SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE course_id = #{course.id}
+			</otherwise>
+		</choose>
+	</update>
+	
+</mapper>

@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.historycourse.dao.HistoryCourseDao">
+    
+	<sql id="historyCourseColumns">
+		a.id AS "id",
+		a.xiangmumingcheng AS "xiangmumingcheng",
+		a.area_id AS "area.id",
+		a.coursename AS "coursename",
+		a.teachername AS "teachername",
+		a.sex AS "sex",
+		a.jiaoshileixing AS "jiaoshileixing",
+		a.xueduan AS "xueduan",
+		a.xuekeleixing AS "xuekeleixing",
+		a.xueke AS "xueke",
+		a.jiaoxueleixing AS "jiaoxueleixing",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.archive_doc AS "archiveDoc",
+		a.regular_flag AS "regularFlag",
+		a3.name AS "area.name"
+	</sql>
+	
+	<sql id="historyCourseJoins">
+		LEFT JOIN sys_area a3 ON a3.id = a.area_id
+	</sql>
+    
+	<select id="get" resultType="HistoryCourse">
+		SELECT 
+			<include refid="historyCourseColumns"/>
+		FROM history_course a
+		<include refid="historyCourseJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="HistoryCourse">
+		SELECT 
+			<include refid="historyCourseColumns"/>
+		FROM history_course a
+		<include refid="historyCourseJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="xiangmumingcheng != null and xiangmumingcheng != ''">
+				AND a.xiangmumingcheng = #{xiangmumingcheng}
+			</if>
+			<if test="coursename != null and coursename != ''">
+				AND a.coursename = #{coursename}
+			</if>
+			<if test="teachername != null and teachername != ''">
+				AND a.teachername = #{teachername}
+			</if>
+			<if test="sex != null and sex != ''">
+				AND a.sex = #{sex}
+			</if>
+			<if test="jiaoshileixing != null and jiaoshileixing != ''">
+				AND a.jiaoshileixing = #{jiaoshileixing}
+			</if>
+			<if test="xueduan != null and xueduan != ''">
+				AND a.xueduan = #{xueduan}
+			</if>
+			<if test="xuekeleixing != null and xuekeleixing != ''">
+				AND a.xuekeleixing = #{xuekeleixing}
+			</if>
+			<if test="xueke != null and xueke != ''">
+				AND a.xueke = #{xueke}
+			</if>
+			<if test="jiaoxueleixing != null and jiaoxueleixing != ''">
+				AND a.jiaoxueleixing = #{jiaoxueleixing}
+			</if>
+			<if test="regularFlag != null and regularFlag != ''">
+				AND a.regular_flag = #{regularFlag}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="HistoryCourse">
+		SELECT 
+			<include refid="historyCourseColumns"/>
+		FROM history_course a
+		<include refid="historyCourseJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO history_course(
+			id,
+			xiangmumingcheng,
+			area_id,
+			coursename,
+			teachername,
+			sex,
+			jiaoshileixing,
+			xueduan,
+			xuekeleixing,
+			xueke,
+			jiaoxueleixing,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			archive_doc
+			regular_flag
+		) VALUES (
+			#{id},
+			#{xiangmumingcheng},
+			#{area.id},
+			#{coursename},
+			#{teachername},
+			#{sex},
+			#{jiaoshileixing},
+			#{xueduan},
+			#{xuekeleixing},
+			#{xueke},
+			#{jiaoxueleixing},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{archiveDoc},
+			#{regularFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE history_course SET 	
+			xiangmumingcheng = #{xiangmumingcheng},
+			area_id = #{area.id},
+			coursename = #{coursename},
+			teachername = #{teachername},
+			sex = #{sex},
+			jiaoshileixing = #{jiaoshileixing},
+			xueduan = #{xueduan},
+			xuekeleixing = #{xuekeleixing},
+			xueke = #{xueke},
+			jiaoxueleixing = #{jiaoxueleixing},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			archive_doc = #{archiveDoc},
+			regular_flag = #{regularFlag}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE history_course SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	
+</mapper>

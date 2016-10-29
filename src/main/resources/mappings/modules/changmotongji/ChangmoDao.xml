@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.changmotongji.dao.ChangmoDao">
+    
+	<sql id="changmoColumns">
+		a.id AS "id",
+		a.jiaoxueleixing AS "jiaoxueleixing",
+		a.xueduan AS "xueduan",
+		a.xuekeleixing AS "xuekeleixing",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.ch AS "ch",
+		a.rt AS "rt",
+		a.rs AS "rs",
+		a.yyhy AS "yyhy",
+		a.fyyhy AS "fyyhy",
+		a.kdhy AS "kdhy",
+		a.fdhy AS "fdhy",
+		a.why AS "why",
+		a.ddxshdd AS "ddxshdd",
+		a.cfhdhjs AS "cfhdhjs",
+		a.glxwt AS "glxwt",
+		a.jyxwt AS "jyxwt",
+		a.tlxwt AS "tlxwt",
+		a.czxwt AS "czxwt",
+		a.ppxwt AS "ppxwt",
+		a.dm AS "dm",
+		a.rxsqd AS "rxsqd",
+		a.jjszd AS "jjszd",
+		a.jwjszd AS "jwjszd",
+		a.glxxtcwt AS "glxxtcwt",
+		a.jtqd AS "jtqd",
+		a.tlhhb AS "tlhhb",
+		a.gbhd AS "gbhd",
+		a.zyd AS "zyd",
+		a.whd AS "whd",
+		a.pdsf AS "pdsf",
+		a.rzjyxhd AS "rzjyxhd",
+		a.tlxhd AS "tlxhd",
+		a.czpjxhd AS "czpjxhd",
+		a.sh AS "sh",
+		a.wh AS "wh",
+		a.ruh AS "ruh",
+		a.ruoh AS "ruoh",
+		a.sdy AS "sdy",
+		a.sder AS "sder",
+		a.sds AS "sds",
+		a.sdsi AS "sdsi",
+		a.sdw AS "sdw",
+		a.area_id AS "area.id",
+		a.quantity AS "quantity",
+		a49.name AS "area.name"
+	</sql>
+	
+	<sql id="changmoJoins">
+		LEFT JOIN sys_area a49 ON a49.id = a.area_id
+	</sql>
+    
+	<select id="get" resultType="Changmo">
+		SELECT 
+			<include refid="changmoColumns"/>
+		FROM changmo a
+		<include refid="changmoJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="find" resultType="Changmo">
+		SELECT 
+			<include refid="changmoColumns"/>
+		FROM changmo a
+		<include refid="changmoJoins"/>
+		<where>
+			a.del_flag = 0
+			<if test="area.id != null and area.id != '' and area.id == '110101'">
+				AND a.area_id = 110101
+			</if>
+			<if test="area.id != null and area.id != '' and area.id != '110101'">
+				AND a.area_id = 100000
+			</if>
+			<if test="jiaoxueleixing != null and jiaoxueleixing != ''">
+				AND a.jiaoxueleixing = #{jiaoxueleixing}
+			</if>
+			<if test="xueduan != null and xueduan != ''">
+				AND a.xueduan = #{xueduan}
+			</if>
+			<if test="xuekeleixing != null and xuekeleixing != ''">
+				AND a.xuekeleixing = #{xuekeleixing}
+			</if>
+		</where>
+	</select>	
+	
+	<select id="findList" resultType="Changmo">
+		SELECT 
+			<include refid="changmoColumns"/>
+		FROM changmo a
+		<include refid="changmoJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="jiaoxueleixing != null and jiaoxueleixing != ''">
+				AND a.jiaoxueleixing = #{jiaoxueleixing}
+			</if>
+			<if test="xueduan != null and xueduan != ''">
+				AND a.xueduan = #{xueduan}
+			</if>
+			<if test="xuekeleixing != null and xuekeleixing != ''">
+				AND a.xuekeleixing = #{xuekeleixing}
+			</if>
+			<if test="area != null and area.id != null and area.id != ''">
+				AND a.area_id = #{area.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Changmo">
+		SELECT 
+			<include refid="changmoColumns"/>
+		FROM changmo a
+		<include refid="changmoJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO changmo(
+			id,
+			jiaoxueleixing,
+			xueduan,
+			xuekeleixing,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			ch,
+			rt,
+			rs,
+			yyhy,
+			fyyhy,
+			kdhy,
+			fdhy,
+			why,
+			ddxshdd,
+			cfhdhjs,
+			glxwt,
+			jyxwt,
+			tlxwt,
+			czxwt,
+			ppxwt,
+			dm,
+			rxsqd,
+			jjszd,
+			jwjszd,
+			glxxtcwt,
+			jtqd,
+			tlhhb,
+			gbhd,
+			zyd,
+			whd,
+			pdsf,
+			rzjyxhd,
+			tlxhd,
+			czpjxhd,
+			sh,
+			wh,
+			ruh,
+			ruoh,
+			sdy,
+			sder,
+			sds,
+			sdsi,
+			sdw,
+			area_id
+		) VALUES (
+			#{id},
+			#{jiaoxueleixing},
+			#{xueduan},
+			#{xuekeleixing},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{ch},
+			#{rt},
+			#{rs},
+			#{yyhy},
+			#{fyyhy},
+			#{kdhy},
+			#{fdhy},
+			#{why},
+			#{ddxshdd},
+			#{cfhdhjs},
+			#{glxwt},
+			#{jyxwt},
+			#{tlxwt},
+			#{czxwt},
+			#{ppxwt},
+			#{dm},
+			#{rxsqd},
+			#{jjszd},
+			#{jwjszd},
+			#{glxxtcwt},
+			#{jtqd},
+			#{tlhhb},
+			#{gbhd},
+			#{zyd},
+			#{whd},
+			#{pdsf},
+			#{rzjyxhd},
+			#{tlxhd},
+			#{czpjxhd},
+			#{sh},
+			#{wh},
+			#{ruh},
+			#{ruoh},
+			#{sdy},
+			#{sder},
+			#{sds},
+			#{sdsi},
+			#{sdw},
+			#{area.id}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE changmo SET 	
+			jiaoxueleixing = #{jiaoxueleixing},
+			xueduan = #{xueduan},
+			xuekeleixing = #{xuekeleixing},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			ch = #{ch},
+			rt = #{rt},
+			rs = #{rs},
+			yyhy = #{yyhy},
+			fyyhy = #{fyyhy},
+			kdhy = #{kdhy},
+			fdhy = #{fdhy},
+			why = #{why},
+			ddxshdd = #{ddxshdd},
+			cfhdhjs = #{cfhdhjs},
+			glxwt = #{glxwt},
+			jyxwt = #{jyxwt},
+			tlxwt = #{tlxwt},
+			czxwt = #{czxwt},
+			ppxwt = #{ppxwt},
+			dm = #{dm},
+			rxsqd = #{rxsqd},
+			jjszd = #{jjszd},
+			jwjszd = #{jwjszd},
+			glxxtcwt = #{glxxtcwt},
+			jtqd = #{jtqd},
+			tlhhb = #{tlhhb},
+			gbhd = #{gbhd},
+			zyd = #{zyd},
+			whd = #{whd},
+			pdsf = #{pdsf},
+			rzjyxhd = #{rzjyxhd},
+			tlxhd = #{tlxhd},
+			czpjxhd = #{czpjxhd},
+			sh = #{sh},
+			wh = #{wh},
+			ruh = #{ruh},
+			ruoh = #{ruoh},
+			sdy = #{sdy},
+			sder = #{sder},
+			sds = #{sds},
+			sdsi = #{sdsi},
+			sdw = #{sdw},
+			area_id = #{area.id},
+			quantity = #{quantity}
+		WHERE id = #{id}
+	</update>
+	
+	
+	
+	<update id="delete">
+		UPDATE changmo SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

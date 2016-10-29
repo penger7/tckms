@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.course.dao.CourseStDao">
+    
+	<sql id="courseStColumns">
+		a.id AS "id",
+		a.course_id AS "course.Id",
+		a.ch AS "ch",
+		a.rt AS "rt",
+		a.rs AS "rs",
+		a.stdatas AS "stdatas",
+		a.sttimer AS "sttimer",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.jiaoxueleixing AS "jiaoxueleixing",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="courseStJoins">
+		LEFT JOIN course b ON b.id = a.course_id
+	</sql>
+    
+	<select id="get" resultType="CourseSt">
+		SELECT 
+			<include refid="courseStColumns"/>
+		FROM course_st a
+		<include refid="courseStJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="CourseSt">
+		SELECT 
+			<include refid="courseStColumns"/>
+		FROM course_st a
+		<include refid="courseStJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="course != null and course.Id != null and course.Id != ''">
+				AND a.course_id = #{course.Id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="CourseSt">
+		SELECT 
+			<include refid="courseStColumns"/>
+		FROM course_st a
+		<include refid="courseStJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO course_st(
+			id,
+			course_id,
+			ch,
+			rt,
+			rs,
+			stdatas,
+			sttimer,
+			create_by,
+			create_date,
+			jiaoxueleixing,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{course.Id},
+			#{ch},
+			#{rt},
+			#{rs},
+			#{stdatas},
+			#{sttimer},
+			#{createBy.id},
+			#{createDate},
+			#{jiaoxueleixing},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE course_st SET 	
+			course_id = #{course.Id},
+			ch = #{ch},
+			rt = #{rt},
+			rs = #{rs},
+			stdatas = #{stdatas},
+			sttimer = #{sttimer},
+			jiaoxueleixing = #{jiaoxueleixing},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM course_st 
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE course_id = #{course.Id}
+			</otherwise>
+		</choose>
+	</update>
+	
+	<insert id="archive">
+		INSERT INTO history_course_st(
+			id,
+			course_id,
+			ch,
+			rt,
+			rs,
+			stdatas,
+			sttimer,
+			create_by,
+			create_date,
+			jiaoxueleixing,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{course.Id},
+			#{ch},
+			#{rt},
+			#{rs},
+			#{stdatas},
+			#{sttimer},
+			#{createBy.id},
+			#{createDate},
+			#{jiaoxueleixing},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+</mapper>

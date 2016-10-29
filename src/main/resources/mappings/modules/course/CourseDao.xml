@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.course.dao.CourseDao">
+    
+	<sql id="courseColumns">
+		a.id AS "id",
+		a.xiangmumingcheng AS "xiangmumingcheng",
+		a.area_id AS "area.id",
+		a.coursename AS "coursename",
+		a.teachername AS "teachername",
+		a.sex AS "sex",
+		a.jiaoshileixing AS "jiaoshileixing",
+		a.xueduan AS "xueduan",
+		a.xuekeleixing AS "xuekeleixing",
+		a.xueke AS "xueke",
+		a.jiaoxueleixing AS "jiaoxueleixing",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.archive_doc AS "archiveDoc",
+		ar.name AS "area.name",
+		ar.parent_ids AS "area.parentIds"
+	</sql>
+	
+	<sql id="courseJoins">
+		LEFT JOIN sys_area ar ON ar.id = a.area_id
+	</sql>
+    
+	<select id="get" resultType="Course">
+		SELECT 
+			<include refid="courseColumns"/>
+		FROM course a
+		<include refid="courseJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Course">
+		SELECT 
+			<include refid="courseColumns"/>
+		FROM course a
+		<include refid="courseJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="xiangmumingcheng != null and xiangmumingcheng != ''">
+				AND a.xiangmumingcheng = #{xiangmumingcheng}
+			</if>
+			<if test="area != null and area.id != null and area.id != ''">
+				AND a.area_id = #{area.id}
+			</if>
+			<if test="coursename != null and coursename != ''">
+				AND a.coursename like CONCAT('%',#{coursename},'%')
+			</if>
+			<if test="teachername != null and teachername != ''">
+				AND a.teachername like CONCAT('%',#{teachername},'%')
+			</if>
+			<if test="sex != null and sex != ''">
+				AND a.sex = #{sex}
+			</if>
+			<if test="jiaoshileixing != null and jiaoshileixing != ''">
+				AND a.jiaoshileixing = #{jiaoshileixing}
+			</if>
+			<if test="xueduan != null and xueduan != ''">
+				AND a.xueduan = #{xueduan}
+			</if>
+			<if test="xuekeleixing != null and xuekeleixing != ''">
+				AND a.xuekeleixing = #{xuekeleixing}
+			</if>
+			<if test="xueke != null and xueke != ''">
+				AND a.xueke = #{xueke}
+			</if>
+			<if test="jiaoxueleixing != null and jiaoxueleixing != ''">
+				AND a.jiaoxueleixing = #{jiaoxueleixing}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Course">
+		SELECT 
+			<include refid="courseColumns"/>
+		FROM course a
+		<include refid="courseJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO course(
+			id,
+			xiangmumingcheng,
+			area_id, 
+			coursename,
+			teachername,
+			sex,
+			jiaoshileixing,
+			xueduan,
+			xuekeleixing,
+			xueke,
+			jiaoxueleixing,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			archive_doc
+		) VALUES (
+			#{id},
+			#{xiangmumingcheng},
+			#{area.id},
+			#{coursename},
+			#{teachername},
+			#{sex},
+			#{jiaoshileixing},
+			#{xueduan},
+			#{xuekeleixing},
+			#{xueke},
+			#{jiaoxueleixing},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{archiveDoc}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE course SET 	
+			xiangmumingcheng = #{xiangmumingcheng},
+			area_id = #{area.id},
+			coursename = #{coursename},
+			teachername = #{teachername},
+			sex = #{sex},
+			jiaoshileixing = #{jiaoshileixing},
+			xueduan = #{xueduan},
+			xuekeleixing = #{xuekeleixing},
+			xueke = #{xueke},
+			jiaoxueleixing = #{jiaoxueleixing},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			archive_doc = #{archiveDoc}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE course SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	<insert id="archive">
+		INSERT INTO history_course(
+			id,
+			xiangmumingcheng,
+			area_id, 
+			coursename,
+			teachername,
+			sex,
+			jiaoshileixing,
+			xueduan,
+			xuekeleixing,
+			xueke,
+			jiaoxueleixing,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			archive_doc
+		) VALUES (
+			#{id},
+			#{xiangmumingcheng},
+			#{area.id},
+			#{coursename},
+			#{teachername},
+			#{sex},
+			#{jiaoshileixing},
+			#{xueduan},
+			#{xuekeleixing},
+			#{xueke},
+			#{jiaoxueleixing},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{archiveDoc}
+		)
+	</insert>
+</mapper>
